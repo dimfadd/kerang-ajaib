@@ -1,18 +1,22 @@
 /*
   Design Read: landing yang sekaligus demo, untuk kreator video pendek Indonesia (orang biasa sampai artis),
-  gaya poster pantai: tinta di atas pasir, Fraunces italic raksasa, satu aksen koral. Halamannya adalah obrolan
-  dengan kerang, bukan brosur fitur.
+  gaya poster laut: tinta laut dalam di atas busa laut, Fraunces italic raksasa, satu aksen kuning keranjang.
+  Halamannya adalah obrolan dengan kerang, bukan brosur fitur.
   Dial: ENERGY 3 / RHYTHM 3 / MOTION 2.
 
   Alasan tiap teknik (R-31):
   - Judul italic 900 raksasa: suara "kerang yang usil", focal point tiap layar.
+  - Kata kunci judul diberi kotak kuning (.mark) seperti teks bertanda di video pendek: kuning jadi isian di
+    belakang tinta, bukan teks kuning di latar terang (yang cuma 1.4:1).
   - Kerang SVG garis tinta + tali + ring: satu-satunya interaksi utama; tarik = tanya. Digambar sendiri.
   - Bayangan solid offset (bukan blur) hanya di kartu jawaban dan lembar contoh: efek stiker/tempelan, menandai "ini yang diomongin Kerang".
-  - Blok terbalik (latar tinta) di bagian nanggung: ganti ritme dan bikin momen paling penting kerasa beda.
+  - Blok laut dalam (--deep, gelap di dua tema) di bagian nanggung: ganti ritme dan bikin momen paling penting kerasa beda.
   - Arsiran di zona tengah meter: zona mati, bukan dekorasi.
   - Stempel "Contoh" huruf kapital: cap karet, supaya contoh tidak pernah terbaca sebagai hasil nyata.
   - Garis buku tulis di catatan memori: memori = buku catatan kerang.
   - Nomor italic besar di daftar pertanyaan: motif identitas yang sama dengan nomor langkah di studio.
+  - Isyarat "Lanjut ke bawah" + garis progres setelah tarikan ke-10: halaman pindah ke spektrum dengan aba-aba,
+    bukan tiba-tiba. Garisnya diam (tanpa animasi) di prefers-reduced-motion, teksnya tetap ada.
   - Motion: ring memantul balik, kerang bergoyang saat ngomong, jawaban muncul. Semua mati di prefers-reduced-motion.
 */
 
@@ -83,7 +87,17 @@ em { font-style: italic; }
 .stage h1 em {
   display: block;
   font-weight: 900;
-  color: var(--accent);
+}
+/* Kotak kuning di belakang kata kunci: dipakai di judul hero dan judul memori */
+.mark {
+  /* Gradien cuma supaya tinggi kotak bisa diatur: area isi Fraunces lebih tinggi dari line-height 0.92,
+     jadi warna penuh bakal menutupi ekor huruf di baris atasnya. */
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 78% / 100% 82%;
+  color: var(--on-accent);
+  padding: 0 0.14em;
+  margin-left: -0.06em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 .stage-sub {
   margin: 0;
@@ -112,7 +126,7 @@ em { font-style: italic; }
   font-weight: 900;
   font-size: 44px;
   line-height: 1;
-  color: var(--accent);
+  color: var(--accent-text);
   min-width: 2ch;
 }
 .answer-body { min-width: 0; }
@@ -127,7 +141,7 @@ em { font-style: italic; }
   margin: 0 0 10px;
   font-weight: 600;
   text-decoration: line-through;
-  text-decoration-color: var(--accent);
+  text-decoration-color: var(--accent-text);
   text-decoration-thickness: 2px;
 }
 .answer-verdict {
@@ -138,7 +152,57 @@ em { font-style: italic; }
   font-size: clamp(19px, 2vw, 24px);
   line-height: 1.3;
 }
-.answer-verdict a { color: var(--accent); font-weight: 700; }
+.answer-verdict a { color: var(--accent-text); font-weight: 700; }
+/* Isyarat sesudah tarikan ke-10: teks + garis yang terisi selama jeda, supaya pindahnya nggak kerasa acak */
+.answer-next {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sea);
+}
+.answer-next-bar {
+  position: relative;
+  flex: 1;
+  max-width: 160px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.answer-next-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--sea);
+  transform-origin: left center;
+  animation: next-fill var(--next-ms, 2400ms) linear forwards;
+}
+@keyframes next-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+/* Tarikan sesudah ke-10: tombol ulang, gaya link supaya nggak saingan sama ajakan */
+.answer-restart {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sea);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+  cursor: pointer;
+}
+.answer-restart:hover { color: var(--ink); }
 @keyframes pop {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: none; }
@@ -172,8 +236,8 @@ em { font-style: italic; }
 .conch-ridge, .conch-line { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; }
 .conch-line { stroke: var(--line-strong); }
 .conch-knob circle { fill: var(--surface-2); stroke: var(--ink); stroke-width: 2.2; }
-.conch-mouth { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 3; stroke-linejoin: round; }
-.conch-mouth-in { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; opacity: 0.7; }
+.conch-mouth { fill: var(--accent); stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; }
+.conch-mouth-in { fill: none; stroke: var(--on-accent); stroke-width: 2; stroke-linecap: round; opacity: 0.45; }
 
 .string-rig {
   position: relative;
@@ -198,6 +262,8 @@ em { font-style: italic; }
   border: 7px solid var(--accent);
   border-radius: 50%;
   background: transparent;
+  /* Tepi tinta di luar dan dalam: kuning saja cuma 1.4:1 ke latar terang, tepinya yang bikin ring kebaca (3:1+) */
+  box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--ink);
   cursor: grab;
   touch-action: none;
 }
@@ -237,8 +303,9 @@ em { font-style: italic; }
 
 /* ---------- 2. Spektrum ---------- */
 .spectrum {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--deep);
+  color: var(--deep-ink);
+  border-block: 1px solid var(--deep-edge);
   padding: clamp(56px, 9vw, 120px) clamp(16px, 4vw, 48px);
 }
 .spectrum-inner { max-width: 1100px; margin: 0 auto; }
@@ -251,13 +318,16 @@ em { font-style: italic; }
   letter-spacing: -0.02em;
 }
 .spectrum h2 span { display: inline-block; }
+/* Fokus dipindah ke sini cuma kalau tarikan ke-10 pakai keyboard; garis fokus hanya untuk keyboard */
+.spectrum h2:focus { outline: none; }
+.spectrum h2:focus-visible { outline: 3px solid var(--accent-inv); outline-offset: 6px; border-radius: 4px; }
 .spectrum h2 span:nth-child(1) { color: var(--accent-inv); }
 .spectrum h2 span:nth-child(2) { color: var(--sea-inv); }
 .spectrum h2 .strike {
   color: var(--muted-inv);
   text-decoration: line-through;
   text-decoration-thickness: 0.08em;
-  text-decoration-color: var(--bg);
+  text-decoration-color: var(--deep-ink);
 }
 .spectrum-lead { max-width: 56ch; margin: 0 0 40px; font-size: 18px; }
 
@@ -267,7 +337,7 @@ em { font-style: italic; }
   height: 30px;
   border-radius: 999px;
   overflow: hidden;
-  border: 2px solid var(--bg);
+  border: 2px solid var(--deep-ink);
 }
 .zone-bad { flex: 30; background: var(--sea-inv); }
 .zone-mid {
@@ -294,21 +364,21 @@ em { font-style: italic; }
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  border: 8px solid var(--bg);
-  background: var(--ink);
-  box-shadow: 0 0 0 2px var(--ink);
+  border: 8px solid var(--deep-ink);
+  background: var(--deep);
+  box-shadow: 0 0 0 2px var(--deep);
 }
 .meter input[type="range"]::-moz-range-thumb {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 8px solid var(--bg);
-  background: var(--ink);
-  box-shadow: 0 0 0 2px var(--ink);
+  border: 8px solid var(--deep-ink);
+  background: var(--deep);
+  box-shadow: 0 0 0 2px var(--deep);
 }
 .meter input[type="range"]:focus-visible { outline: none; }
-.meter input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 2px var(--ink), 0 0 0 6px var(--sea-inv); }
-.meter input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 2px var(--ink), 0 0 0 6px var(--sea-inv); }
+.meter input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 2px var(--deep), 0 0 0 6px var(--accent-inv); }
+.meter input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 2px var(--deep), 0 0 0 6px var(--accent-inv); }
 
 .meter-labels {
   display: flex;
@@ -364,9 +434,9 @@ em { font-style: italic; }
   right: 18px;
   margin: 0;
   padding: 4px 14px;
-  border: 4px double var(--accent);
+  border: 4px double var(--accent-text);
   border-radius: 6px;
-  color: var(--accent);
+  color: var(--accent-text);
   font-family: "Fraunces", Georgia, serif;
   font-weight: 900;
   font-size: 22px;
@@ -395,7 +465,7 @@ q { quotes: "\201C" "\201D"; font-style: italic; }
   font-style: normal;
   font-size: 12px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .is-hook .row-flag { color: var(--ink); }
 .is-catch .row-flag { color: var(--sea); }
@@ -424,7 +494,7 @@ q { quotes: "\201C" "\201D"; font-style: italic; }
   padding: clamp(40px, 7vw, 96px) clamp(16px, 4vw, 48px);
 }
 .memory h2 { margin: 0 0 18px; font-size: clamp(32px, 4.6vw, 58px); line-height: 1; }
-.memory h2 em { display: block; color: var(--accent); }
+.memory h2 em { display: block; }
 .memory-text p { margin: 0 0 14px; font-size: 17px; }
 .memory-honest { color: var(--muted); font-size: 15px !important; }
 
@@ -448,7 +518,7 @@ q { quotes: "\201C" "\201D"; font-style: italic; }
 .notebook-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 32px; }
 .notebook-list p { margin: 0; line-height: 32px; }
 .nb-who { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 700; color: var(--sea); }
-.nb-kerang .nb-who { color: var(--accent); }
+.nb-kerang .nb-who { color: var(--accent-text); }
 .nb-kerang p:last-child { font-weight: 600; }
 
 /* ---------- 5. Tanya ---------- */
@@ -470,7 +540,7 @@ q { quotes: "\201C" "\201D"; font-style: italic; }
   font-weight: 900;
   font-size: 40px;
   line-height: 1;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .ask-list p { margin: 0; font-size: 17px; }
 .ask-cta {
@@ -592,4 +662,6 @@ q { quotes: "\201C" "\201D"; font-style: italic; }
   .conch.talk, .answer-body.pop, .ring.rang, .answer-count.bump,
   .conch.talk .conch-mouth, .conch.talk .conch-mouth-in { animation: none; }
   .stage-conch.springing .string, .stage-conch.yanking .string { transition: none; }
+  /* Garis progres tidak bergerak; teks "Lanjut ke bawah..." tetap jadi aba-abanya */
+  .answer-next-bar::after { animation: none; transform: scaleX(1); opacity: 0.5; }
 }

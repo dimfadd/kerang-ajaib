@@ -5,7 +5,7 @@
 //   <button type="button" class="theme-toggle" id="themeToggle" aria-pressed="false">
 //     <span class="theme-toggle-label">Mode gelap</span>
 //   </button>
-// Bagian visual (rel pantai + matahari/bulan) dipasang dari sini, jadi cuma ada satu sumber.
+// Bagian visual (rel laut + matahari/bulan) dipasang dari sini, jadi cuma ada satu sumber.
 
 const STORAGE_KEY = "kerang-theme";
 const osDark = matchMedia("(prefers-color-scheme: dark)");

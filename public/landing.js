@@ -57,13 +57,48 @@ const ring = document.getElementById("ring");
 const answerBody = document.getElementById("answerBody");
 const answerNum = document.getElementById("answerNum");
 const answer = document.getElementById("answer");
+const specTitle = document.getElementById("specTitle");
+const header = document.querySelector(".l-top");
 
-let index = -1;
+// Isi awal kartu ("Kerang lagi diam."), disimpan buat tombol ulang.
+const idleContent = [...answerBody.children].map((n) => n.cloneNode(true));
+
+let index = -1; // -1 = belum ditarik, 0..9 = baris yang tampil
 let ctaHref = "/masuk";
 let ctaText = "Kenalin kreatormu ke Kerang";
 
-function speak() {
-  index = (index + 1) % LINES.length;
+function ctaLink() {
+  const a = document.createElement("a");
+  a.href = ctaHref;
+  a.textContent = ctaText;
+  return a;
+}
+
+function animateTalk() {
+  if (reduceMotion.matches) return;
+  answerBody.classList.remove("pop");
+  conch.classList.remove("talk");
+  ring.classList.remove("rang");
+  answerNum.parentElement.classList.remove("bump");
+  void answerBody.offsetWidth; // mulai ulang animasi
+  answerBody.classList.add("pop");
+  conch.classList.add("talk");
+  ring.classList.add("rang");
+  answerNum.parentElement.classList.add("bump");
+}
+
+// viaKeyboard: tarikan lewat Enter/Spasi. Cuma dipakai buat mutusin fokus ikut pindah atau tidak.
+function speak(viaKeyboard = false) {
+  cancelAdvance();
+  const last = LINES.length - 1;
+
+  // Sudah di baris ke-10: jangan mulai lagi dari 01. Kerang tutup, ajakan tetap ada, ulang cuma kalau diminta.
+  if (index >= last) {
+    speakRest();
+    return;
+  }
+
+  index += 1;
   const line = LINES[index];
   answerNum.textContent = String(index + 1).padStart(2, "0");
 
@@ -76,27 +111,110 @@ function speak() {
   const verdict = document.createElement("p");
   verdict.className = "answer-verdict";
   verdict.textContent = line.verdict + " ";
-  if (line.cta) {
-    const a = document.createElement("a");
-    a.href = ctaHref;
-    a.textContent = ctaText;
-    verdict.append(a);
-  }
+  if (line.cta) verdict.append(ctaLink());
   answerBody.replaceChildren(label, habit, verdict);
 
-  if (!reduceMotion.matches) {
-    answerBody.classList.remove("pop");
-    conch.classList.remove("talk");
-    ring.classList.remove("rang");
-    answerNum.parentElement.classList.remove("bump");
-    void answerBody.offsetWidth; // mulai ulang animasi
-    answerBody.classList.add("pop");
-    conch.classList.add("talk");
-    ring.classList.add("rang");
-    answerNum.parentElement.classList.add("bump");
-  }
+  animateTalk();
   // Fokus tidak dipindah: jawaban diumumkan lewat aria-live, dan ring tetap siap ditarik lagi.
   requestAnimationFrame(revealAnswer);
+
+  if (index === last) scheduleAdvance(viaKeyboard);
+}
+
+// Tarikan sesudah yang ke-10: penutup pendek + ajakan + tombol ulang. Nomor tetap 10.
+function speakRest() {
+  answerNum.textContent = String(LINES.length).padStart(2, "0");
+  const label = document.createElement("p");
+  label.className = "answer-habit-label";
+  label.textContent = `Tarikan ${LINES.length} dari ${LINES.length}. Talinya udah habis.`;
+  const verdict = document.createElement("p");
+  verdict.className = "answer-verdict";
+  verdict.textContent = "Udah, Kerang capek ngomel. Sekarang giliranmu. ";
+  verdict.append(ctaLink());
+  const restart = document.createElement("button");
+  restart.type = "button";
+  restart.className = "answer-restart";
+  restart.textContent = "Ulang dari 01";
+  restart.addEventListener("click", () => {
+    resetConch();
+    ring.focus({ preventScroll: true });
+  });
+  answerBody.replaceChildren(label, verdict, restart);
+  animateTalk();
+  requestAnimationFrame(revealAnswer);
+}
+
+// Balik ke 00, kerang diam lagi.
+function resetConch() {
+  cancelAdvance();
+  index = -1;
+  answerNum.textContent = "00";
+  answerBody.replaceChildren(...idleContent.map((n) => n.cloneNode(true)));
+}
+
+/* ---------- Habis tarikan ke-10: turun ke spektrum ---------- */
+// 2400 ms: jawaban ke-10 cuma dua kalimat pendek (sekitar 9 kata, kira-kira 2 detik baca santai), ditambah
+// 350 ms animasi muncul. Lebih pendek dari itu kalimatnya belum kebaca; lebih panjang, isyaratnya kerasa macet.
+// Kalau ada yang masih baca atau mau nge-tap link, interaksi apa pun membatalkan.
+const ADVANCE_MS = 2400;
+const CANCEL_EVENTS = ["pointerdown", "wheel", "touchstart", "keydown"];
+let advanceTimer = 0;
+let advanceCue = null;
+let ignoreScrollUntil = 0;
+
+function scheduleAdvance(viaKeyboard) {
+  if (!specTitle) return;
+  advanceCue = document.createElement("p");
+  advanceCue.className = "answer-next";
+  advanceCue.style.setProperty("--next-ms", `${ADVANCE_MS}ms`);
+  const text = document.createElement("span");
+  text.textContent = "Lanjut ke bawah...";
+  const bar = document.createElement("span");
+  bar.className = "answer-next-bar";
+  bar.setAttribute("aria-hidden", "true");
+  advanceCue.append(text, bar);
+  answerBody.append(advanceCue);
+
+  // Didaftarkan sesudah frame berikutnya, supaya event dari tarikan barusan tidak ikut membatalkan.
+  requestAnimationFrame(() => {
+    if (!advanceCue) return;
+    CANCEL_EVENTS.forEach((t) => window.addEventListener(t, cancelAdvance, { capture: true, passive: true }));
+    window.addEventListener("scroll", onUserScroll, { passive: true });
+    document.addEventListener("visibilitychange", cancelAdvance);
+  });
+  advanceTimer = setTimeout(() => advance(viaKeyboard), ADVANCE_MS);
+}
+
+function onUserScroll() {
+  // Geseran otomatis dari revealAnswer bukan tanda orang lagi baca; sisanya dianggap scroll manual.
+  if (performance.now() < ignoreScrollUntil) return;
+  cancelAdvance();
+}
+
+function stopListening() {
+  clearTimeout(advanceTimer);
+  advanceTimer = 0;
+  CANCEL_EVENTS.forEach((t) => window.removeEventListener(t, cancelAdvance, { capture: true }));
+  window.removeEventListener("scroll", onUserScroll);
+  document.removeEventListener("visibilitychange", cancelAdvance);
+  if (advanceCue) advanceCue.remove();
+  advanceCue = null;
+}
+
+function cancelAdvance() {
+  if (!advanceCue && !advanceTimer) return;
+  stopListening();
+}
+
+function advance(viaKeyboard) {
+  stopListening();
+  if (document.hidden) return; // tab lagi di belakang: jangan pindahin halaman diam-diam
+  const pos = header ? getComputedStyle(header).position : "";
+  const headerOffset = pos === "sticky" || pos === "fixed" ? header.getBoundingClientRect().height : 0;
+  const top = specTitle.getBoundingClientRect().top + window.scrollY - headerOffset - 24;
+  window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion.matches ? "auto" : "smooth" });
+  // Pengguna keyboard dan pembaca layar ikut pindah; pengguna mouse/sentuh fokusnya tidak dicuri.
+  if (viaKeyboard) specTitle.focus({ preventScroll: true });
 }
 
 /* ---------- Pastikan jawaban kelihatan ---------- */
@@ -125,6 +243,7 @@ function revealAnswer() {
   }
   if (Math.abs(delta) < 4) return;
   lastReveal = now;
+  ignoreScrollUntil = now + 1200;
   window.scrollBy({ top: delta, behavior: reduceMotion.matches ? "auto" : "smooth" });
 }
 
@@ -178,22 +297,32 @@ ring.addEventListener("pointerup", endDrag);
 ring.addEventListener("pointercancel", endDrag);
 
 // Klik biasa, Enter, atau Spasi: tarik otomatis.
-ring.addEventListener("click", () => {
+ring.addEventListener("click", (e) => {
   if (suppressClick) {
     suppressClick = false;
     return;
   }
+  const viaKeyboard = e.detail === 0; // Enter/Spasi memicu click tanpa hitungan klik mouse
   if (reduceMotion.matches) {
-    speak();
+    speak(viaKeyboard);
     return;
   }
   conchStage.classList.remove("springing");
   conchStage.classList.add("yanking");
   setPull(90);
   setTimeout(() => {
-    speak();
+    speak(viaKeyboard);
     springBack();
   }, 170);
+});
+
+// "Tarik talinya lagi" di footer: benar-benar mulai lagi dari 00, lalu fokus ke ring supaya siap ditarik.
+document.querySelectorAll("[data-restart]").forEach((link) => {
+  link.addEventListener("click", () => {
+    resetConch();
+    // Sesudah lompatan ke #tanya selesai diproses browser; kalau dipanggil langsung, fokusnya ditimpa lompatan itu.
+    setTimeout(() => ring.focus({ preventScroll: true }), 0);
+  });
 });
 
 /* ---------- Meter nanggung ---------- */

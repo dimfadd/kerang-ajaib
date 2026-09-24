@@ -7,7 +7,7 @@
   - Gelembung omongan dengan ekor: kalimat itu diucapkan kerang, bukan paragraf deskripsi.
   - Nomor italic besar (01/02): motif identitas yang sama dengan landing dan studio.
   - Kartu form dengan bayangan solid offset: stiker yang sama dengan kartu jawaban di landing, satu-satunya elevasi.
-  - Garis koral yang meluncur di bawah tab: mode aktif ditandai posisi, dan geraknya bilang "pindah", bukan "ganti halaman".
+  - Garis emas (--accent-text) yang meluncur di bawah tab: mode aktif ditandai posisi, dan geraknya bilang "pindah", bukan "ganti halaman".
   - Motion: garis tab meluncur, kerang goyang dan gelembung muncul saat mode ganti. Semua mati di prefers-reduced-motion.
 */
 
@@ -49,7 +49,7 @@
   font-weight: 900;
   font-size: clamp(56px, 8vw, 104px);
   line-height: 1;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .m-say h1 {
   margin: 4px 0 28px;
@@ -148,7 +148,7 @@
   width: 50%;
   height: 4px;
   border-radius: 4px 4px 0 0;
-  background: var(--accent);
+  background: var(--accent-text);
 }
 .m-tabs.is-ready .m-tabs-ink { transition: transform 0.28s cubic-bezier(0.34, 1.3, 0.64, 1); }
 .m-tabs[data-mode="masuk"] .m-tabs-ink { transform: translateX(100%); }
@@ -220,7 +220,7 @@
 /* Meter panjang password: tiga ruas, cuma ngukur panjang (aturan server: minimal 8) */
 .pw-meter { display: flex; gap: 4px; margin-top: 2px; }
 .pw-meter span { flex: 1; height: 4px; border-radius: 2px; background: var(--line); transition: background-color 0.2s ease; }
-.pw-meter[data-level="1"] span:nth-child(1) { background: var(--accent); }
+.pw-meter[data-level="1"] span:nth-child(1) { background: var(--accent-text); }
 .pw-meter[data-level="2"] span:nth-child(-n+2),
 .pw-meter[data-level="3"] span { background: var(--sea); }
 
