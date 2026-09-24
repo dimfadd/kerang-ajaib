@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Masuk ke Kerang Ajaib</title>
+  <meta name="description" content="Daftar atau masuk ke Kerang Ajaib untuk menyimpan kreator dan riwayat kontenmu.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,700;1,9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="masuk.css">
+  <script>
+    try {
+      const t = localStorage.getItem("kerang-theme");
+      if (t) document.documentElement.dataset.theme = t;
+    } catch {}
+  </script>
+</head>
+<body>
+  <header class="m-top">
+    <a class="m-brand" href="/" aria-label="Kerang Ajaib, kembali ke halaman depan">
+      <svg class="brand-shell" aria-hidden="true" focusable="false"><use href="/favicon.svg#kerang-logo"/></svg>
+      <span>Kerang Ajaib</span>
+    </a>
+    <button type="button" class="ghost-btn" id="themeToggle"><span data-theme-label>Mode gelap</span></button>
+  </header>
+
+  <main class="m-main">
+    <section class="m-say" aria-live="polite">
+      <p class="m-say-num" aria-hidden="true" id="sayNum">01</p>
+      <h1 id="sayTitle">Kenalan dulu.</h1>
+      <p class="m-say-line" id="sayLine">Kerang nggak bisa ngasih ide personal ke orang yang belum dia kenal. Bikin akun, terus kenalin kreator-kreatormu satu per satu.</p>
+    </section>
+
+    <section class="m-card" aria-labelledby="sayTitle">
+      <div class="m-tabs" role="tablist" aria-label="Pilih daftar atau masuk">
+        <button type="button" role="tab" id="tabDaftar" aria-controls="authPanel" aria-selected="true" data-mode="daftar">Daftar</button>
+        <button type="button" role="tab" id="tabMasuk" aria-controls="authPanel" aria-selected="false" tabindex="-1" data-mode="masuk">Masuk</button>
+      </div>
+
+      <div id="authPanel" role="tabpanel" aria-labelledby="tabDaftar">
+        <form id="authForm" novalidate>
+          <label id="nameField">Nama kamu
+            <input name="name" autocomplete="name" placeholder="Nama panggilan juga boleh" maxlength="80">
+          </label>
+          <label>Email
+            <input name="email" type="email" autocomplete="email" inputmode="email" placeholder="kamu@email.com" required>
+          </label>
+          <label for="password">Password</label>
+          <div class="pw-row">
+            <input id="password" name="password" type="password" autocomplete="new-password" required aria-describedby="pwHint">
+            <button type="button" class="ghost-btn" id="pwToggle" aria-controls="password">Lihat</button>
+          </div>
+          <p class="m-hint" id="pwHint">Minimal 8 karakter.</p>
+
+          <p class="m-error" id="authError" role="alert"></p>
+
+          <button type="submit" class="pull-btn" id="authSubmit">
+            <span class="pull-string" aria-hidden="true"></span>
+            <span id="authSubmitLabel">Kenalan sama Kerang</span>
+          </button>
+        </form>
+        <p class="m-switch" id="switchLine">Udah punya akun? <button type="button" class="link-btn" data-switch="masuk">Masuk aja</button></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="masuk.js" type="module"></script>
+</body>
+</html>

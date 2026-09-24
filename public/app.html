@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studio Kerang Ajaib</title>
+  <meta name="description" content="Studio Kerang Ajaib: brief kreator, arahan director, dan riwayat konten per kreator.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    try {
+      const t = localStorage.getItem("kerang-theme");
+      if (t) document.documentElement.dataset.theme = t;
+    } catch {}
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-shell" aria-hidden="true" focusable="false"><use href="/favicon.svg#kerang-logo"/></svg>
+      <div>
+        <h1><a href="/" class="brand-link">Kerang Ajaib</a></h1>
+        <p class="tagline">Ceritain siapa kamu. Kerang yang nyusun videonya.</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <p class="who" id="whoName" hidden></p>
+      <button type="button" class="ghost-btn" id="themeToggle"><span data-theme-label>Mode gelap</span></button>
+      <button type="button" class="ghost-btn" id="logoutBtn" hidden>Keluar</button>
+    </div>
+  </header>
+
+  <div class="boot" id="boot" role="status">
+    <p class="boot-line" id="bootLine">Kerang lagi ngecek kamu siapa&hellip;</p>
+    <button type="button" class="ghost-btn" id="bootRetry" hidden>Coba lagi</button>
+  </div>
+
+  <section class="ai-note" id="aiNote" aria-labelledby="aiNoteTitle" hidden>
+    <svg class="ai-note-mark" aria-hidden="true" focusable="false"><use href="/favicon.svg#kerang-shell"/></svg>
+    <div>
+      <h2 class="ai-note-title" id="aiNoteTitle">Kerang belum disambungkan ke AI.</h2>
+      <p>Pemilik aplikasi perlu mengisi <code>ANTHROPIC_API_KEY</code> di environment variables deployment (di Vercel: Settings, lalu Environment Variables), terus deploy ulang. Sampai itu beres, Kerang belum bisa bikin arahan.</p>
+      <p>Yang lain sudah jalan: simpan dan ubah kreator, buka riwayat, lapor hasil video.</p>
+    </div>
+  </section>
+
+  <main class="layout" id="studio" hidden>
+    <form id="briefForm" class="brief" novalidate>
+      <section class="persona-bar" aria-labelledby="personaTitle">
+        <div class="persona-head">
+          <h2 id="personaTitle" class="persona-title">Kreator di akunmu</h2>
+          <p class="persona-memory" id="personaMemory"></p>
+        </div>
+        <label for="personaSelect" class="sr-only">Pilih kreator tersimpan</label>
+        <div class="persona-row">
+          <select id="personaSelect" disabled>
+            <option value="">Memuat kreator&hellip;</option>
+          </select>
+          <button type="button" class="ghost-btn" id="personaUpdate" hidden>Simpan perubahan</button>
+          <button type="button" class="ghost-btn" id="personaCreate">Simpan sebagai kreator baru</button>
+          <button type="button" class="ghost-btn danger" id="personaDelete" hidden>Hapus</button>
+          <button type="button" class="ghost-btn" id="personaRetry" hidden>Muat ulang kreator</button>
+        </div>
+        <p class="hint" id="personaMsg" role="status"></p>
+        <div class="legacy" id="legacyBox" hidden>
+          <p id="legacyText"></p>
+          <button type="button" class="ghost-btn" id="legacyImport">Pindahkan ke akun</button>
+        </div>
+      </section>
+
+      <fieldset class="step">
+        <legend><span class="num">1</span> Siapa kreatornya?</legend>
+        <p class="step-note">Makin detail ceritanya, makin personal idenya. Kalau kamu artis atau influencer, ceritakan citra publikmu.</p>
+        <div class="grid-2">
+          <label>Nama / panggilan <span class="req">wajib salah satu</span>
+            <input name="creatorName" autocomplete="off" placeholder="Bang Jali">
+          </label>
+          <label>Akun
+            <input name="handle" autocomplete="off" placeholder="@bangjali.makan">
+          </label>
+        </div>
+        <label>Status
+          <select name="creatorType">
+            <option>Orang biasa / baru mulai</option>
+            <option>Kreator mikro (komunitas kecil tapi aktif)</option>
+            <option>Kreator menengah</option>
+            <option>Influencer besar</option>
+            <option>Artis / public figure</option>
+            <option>Akun brand / toko</option>
+          </select>
+        </label>
+        <label>Cerita tentang dia <span class="req">wajib salah satu</span>
+          <textarea name="whoIs" rows="4" placeholder="Mantan kuli bangunan yang sekarang review warteg. Badannya besar, porsi makannya 3x orang normal, tapi kalau ngomong pelan dan sopan banget."></textarea>
+        </label>
+        <div class="grid-3">
+          <label>Followers
+            <input name="followers" type="number" min="0" inputmode="numeric" placeholder="120000">
+          </label>
+          <label>Rata-rata views
+            <input name="avgViews" type="number" min="0" inputmode="numeric" placeholder="35000">
+          </label>
+          <label>Niche
+            <input name="niche" placeholder="kuliner murah">
+          </label>
+        </div>
+        <p class="hint">Rata-rata views lebih jujur daripada followers. Isi dari 10 video terakhir kalau bisa.</p>
+        <label>Catatan engagement
+          <input name="engagementNotes" placeholder="Komentar biasanya minta review tempat di kota mereka">
+        </label>
+        <div class="checks" role="group" aria-label="Platform utama">
+          <span class="checks-label">Platform utama</span>
+          <label class="chip"><input type="checkbox" name="platforms" value="TikTok" checked> TikTok</label>
+          <label class="chip"><input type="checkbox" name="platforms" value="Instagram Reels"> Instagram Reels</label>
+          <label class="chip"><input type="checkbox" name="platforms" value="YouTube Shorts"> YouTube Shorts</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="step">
+        <legend><span class="num">2</span> Karakter & ciri khas</legend>
+        <p class="step-note">Hal yang bikin orang langsung ngenalin dia, bahkan sebelum lihat namanya.</p>
+        <label>Kepribadian & cara membawakan
+          <textarea name="personality" rows="3" placeholder="Kalem, lugu, suka melebih-lebihkan rasa makanan dengan perumpamaan aneh"></textarea>
+        </label>
+        <label>Gaya bahasa / logat
+          <input name="speakingStyle" placeholder="Betawi campur gaul, manggil penonton 'boss'">
+        </label>
+        <label>Catchphrase khas <span class="opt">satu per baris</span>
+          <textarea name="catchphrases" rows="3" placeholder="makan segini mah cuma bikin geli-geli lambung&#10;ganjel dulu, boss"></textarea>
+        </label>
+        <label>Kebiasaan / gestur berpola
+          <textarea name="signatureActions" rows="2" placeholder="Selalu cium sendok sebelum suapan pertama, selalu pakai kaos oblong putih"></textarea>
+        </label>
+        <div class="grid-2">
+          <label>Cara tampil di kamera
+            <select name="onCamera">
+              <option>Tampil wajah dan bicara langsung</option>
+              <option>Voiceover, wajah jarang terlihat</option>
+              <option>Faceless (tangan / produk saja)</option>
+              <option>Fleksibel</option>
+            </select>
+          </label>
+          <label>Batasan <span class="opt">tidak mau dilakukan</span>
+            <input name="boundaries" placeholder="Tidak mau prank orang asing">
+          </label>
+        </div>
+        <label>Konten yang pernah ramai & kenapa menurutmu
+          <textarea name="pastHits" rows="2" placeholder="Video habisin nasi padang 5 porsi, ramai karena ekspresinya datar terus"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset class="step">
+        <legend><span class="num">3</span> Mau bikin konten apa?</legend>
+        <label>Topik / bahasan <span class="req">wajib</span>
+          <textarea name="topic" rows="3" placeholder="Review mie instan pedas level baru"></textarea>
+        </label>
+        <div class="grid-2">
+          <label>Tujuan utama
+            <select name="goal">
+              <option>Viral / jangkauan seluas mungkin</option>
+              <option>Jualan produk keranjang kuning</option>
+              <option>Naikin followers</option>
+              <option>Membangun series yang ditunggu</option>
+            </select>
+          </label>
+          <label>Target penonton
+            <input name="audience" placeholder="Anak kos dan pekerja muda 18-30">
+          </label>
+        </div>
+        <div class="grid-2">
+          <label>Platform target video ini
+            <select name="targetPlatform">
+              <option>TikTok</option>
+              <option>Instagram Reels</option>
+              <option>YouTube Shorts</option>
+              <option>Semua (dipotong sama)</option>
+            </select>
+          </label>
+          <label>Durasi
+            <select name="duration">
+              <option value="15">15 detik</option>
+              <option value="30" selected>30 detik</option>
+              <option value="60">60 detik</option>
+              <option value="90">90 detik</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="toggle-line">
+          <input type="checkbox" name="hasProduct" id="hasProduct">
+          Ada produk keranjang kuning
+        </label>
+        <div class="product-box" id="productBox" hidden>
+          <div class="grid-2">
+            <label>Nama produk
+              <input name="productName" placeholder="Mie Setan Level 10">
+            </label>
+            <label>Harga
+              <input name="productPrice" placeholder="Rp18.900 isi 5">
+            </label>
+          </div>
+          <label>Keunggulan / USP
+            <textarea name="productUsp" rows="2" placeholder="Pedasnya dari cabai asli, bukan essence. Kuah kental."></textarea>
+          </label>
+          <label>Catatan brand <span class="opt">wajib sebut, larangan, klaim yang boleh</span>
+            <textarea name="productNotes" rows="2" placeholder="Jangan bilang 'paling pedas di Indonesia'"></textarea>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="step">
+        <legend><span class="num">4</span> Bahan tambahan</legend>
+        <label>Isu / tren yang lagi ramai
+          <textarea name="trendNotes" rows="2" placeholder="Lagi ramai sound 'kamu nanya?', dan debat bubur diaduk vs tidak"></textarea>
+        </label>
+        <label class="toggle-line">
+          <input type="checkbox" name="researchTrends">
+          Biar Kerang cari tren terbaru sendiri di internet
+        </label>
+        <p class="hint">Proses jadi lebih lama dan butuh akses web search di akun API kamu.</p>
+
+        <div class="upload">
+          <span class="upload-title">Foto referensi</span>
+          <p class="hint">Produk, tempat, properti, outfit. Kerang akan pakai detail yang terlihat di foto. Maksimal 6 foto, otomatis dikecilkan sebelum dikirim.</p>
+          <label class="upload-drop" for="imageInput">
+            <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple>
+            <span>Pilih foto</span>
+          </label>
+          <ul class="thumbs" id="thumbs"></ul>
+        </div>
+
+        <div class="grid-2">
+          <label>Alat & tim yang tersedia
+            <input name="equipment" placeholder="HP, tripod, 1 teman bisa bantu">
+          </label>
+          <label>Lokasi yang bisa dipakai
+            <input name="location" placeholder="Kamar kos, warung depan gang">
+          </label>
+        </div>
+        <label>Konten referensi yang kamu suka
+          <textarea name="references" rows="2" placeholder="Gaya editing cepat ala kreator X, atau format POV"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset class="step">
+        <legend><span class="num">5</span> Seberapa berani?</legend>
+        <div class="bold-options" role="radiogroup" aria-label="Level keberanian">
+          <label class="bold-card">
+            <input type="radio" name="boldness" value="aman">
+            <strong>Segar tapi aman</strong>
+            <span>Beda dari yang lain, tetap rapi untuk brand.</span>
+          </label>
+          <label class="bold-card">
+            <input type="radio" name="boldness" value="nyeleneh" checked>
+            <strong>Nyeleneh</strong>
+            <span>Absurd dan tak terduga, tetap dalam karakter.</span>
+          </label>
+          <label class="bold-card">
+            <input type="radio" name="boldness" value="ekstrem">
+            <strong>Ekstrem</strong>
+            <span>Bagus banget, atau jelek banget yang disengaja.</span>
+          </label>
+        </div>
+        <div class="grid-2">
+          <label>Jumlah ide
+            <select name="ideaCount">
+              <option>1</option>
+              <option>2</option>
+              <option selected>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </label>
+          <label>Catatan tambahan
+            <input name="extraNotes" placeholder="Mau ada teman yang ikut muncul">
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="submit-row">
+        <p class="form-error" id="formError" role="alert"></p>
+        <button type="submit" class="pull-btn" id="submitBtn">
+          <span class="pull-string" aria-hidden="true"></span>
+          <span id="submitLabel">Tarik tali Kerang Ajaib</span>
+        </button>
+        <p class="hint submit-note" id="submitNote"></p>
+      </div>
+    </form>
+
+    <section class="output" aria-label="Hasil Kerang Ajaib">
+      <div class="output-head">
+        <div class="view-tabs" role="tablist" aria-label="Tampilan panel hasil">
+          <button type="button" role="tab" id="tabResult" aria-controls="viewResult" aria-selected="true">Arahan director</button>
+          <button type="button" role="tab" id="tabHistory" aria-controls="viewHistory" aria-selected="false" tabindex="-1">Riwayat <span class="tab-count" id="historyCount"></span></button>
+        </div>
+        <div class="output-actions" id="outputActions" hidden>
+          <button type="button" class="ghost-btn" id="copyBtn">Salin semua</button>
+          <button type="button" class="ghost-btn" id="downloadBtn">Unduh .md</button>
+        </div>
+      </div>
+
+      <p class="demo-tag" id="demoTag" hidden><span class="demo-tag-label">Mode demo</span> Hasil di sini contoh bawaan, bukan tulisan AI beneran.</p>
+
+      <div class="view" id="viewResult" role="tabpanel" aria-labelledby="tabResult">
+        <div class="output-body" id="outputBody">
+          <div class="gen-meta" id="genMeta" hidden></div>
+          <div class="empty" id="emptyState">
+            <p class="empty-lead">Kerang belum dengar apa-apa.</p>
+            <p>Isi brief di sebelah, lalu tarik talinya. Tiga hal yang paling bikin ide tajam:</p>
+            <ol>
+              <li><strong>Cerita tentang dia</strong>, bukan cuma niche. Keanehan kecil itu emas.</li>
+              <li><strong>Catchphrase dan kebiasaan</strong> yang selalu muncul di videonya.</li>
+              <li><strong>Rata-rata views</strong> yang jujur, supaya Kerang tahu seberapa keras hook-nya harus teriak.</li>
+            </ol>
+            <p>Konten yang pernah dibikin ada di tab <button type="button" class="link-btn" id="emptyToHistory">Riwayat</button>.</p>
+          </div>
+          <div id="turns"></div>
+          <div id="reportSlot"></div>
+        </div>
+
+        <form class="revise" id="reviseForm" hidden>
+          <div class="revise-chips" role="group" aria-label="Revisi cepat">
+            <button type="button" class="chip-btn" data-revise="Dorong semua ide jadi lebih nyeleneh dan absurd, tetap dalam karakter kreator.">Lebih nyeleneh</button>
+            <button type="button" class="chip-btn" data-revise="Ganti semua hook 3 detik pertama dengan 2 alternatif hook yang lebih agresif untuk tiap ide.">Ganti hook</button>
+            <button type="button" class="chip-btn" data-revise="Buat versi yang lebih kuat untuk jualan keranjang kuning tanpa terasa iklan.">Lebih jualan</button>
+            <button type="button" class="chip-btn" data-revise="Ubah ide-ide ini supaya bisa direkam sendirian hanya dengan HP, tanpa bantuan orang lain.">Rekam sendirian</button>
+          </div>
+          <label for="reviseInput" class="sr-only">Permintaan revisi</label>
+          <div class="revise-row">
+            <textarea id="reviseInput" rows="2" placeholder="Minta revisi, misalnya: ide 2 bikin versi 15 detik"></textarea>
+            <button type="submit" class="pull-btn small" id="reviseBtn">Kirim revisi</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="view" id="viewHistory" role="tabpanel" aria-labelledby="tabHistory" hidden>
+        <div class="history-head">
+          <p class="history-lead" id="historyLead">Semua yang pernah Kerang bikinin di akunmu.</p>
+          <div class="scope" role="group" aria-label="Tampilkan riwayat">
+            <button type="button" class="scope-btn" id="scopePersona" aria-pressed="false">Kreator ini</button>
+            <button type="button" class="scope-btn" id="scopeAll" aria-pressed="true">Semua kreator</button>
+          </div>
+        </div>
+        <p class="history-msg" id="historyMsg" role="status"></p>
+        <div class="history-state" id="historyState"></div>
+        <ol class="history-list" id="historyList"></ol>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script src="app.js" type="module"></script>
+</body>
+</html>

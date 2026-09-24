@@ -1,0 +1,19 @@
+{
+  "name": "kerang-ajaib",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Director AI untuk ide & skrip video pendek yang personal dan berpotensi viral",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "dev": "node --watch --env-file-if-exists=.env server.js"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
+    "express": "^5.2.1",
+    "pg": "^8.23.0"
+  }
+}

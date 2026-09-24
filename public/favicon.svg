@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="30 -8 212 296">
+  <!--
+    Satu-satunya sumber logo Kerang Ajaib.
+    Bentuknya diturunkan langsung dari kerang yang ditarik di hero landing (svg#conch di index.html,
+    viewBox 0 0 240 280): path badan dan mulutnya sama persis, cuma garisnya ditebalkan dan detail kecil
+    (bintil, garis tipis) dibuang supaya kebaca di 24 sampai 44px.
+
+    Dipakai dengan dua cara:
+    1. Header semua halaman: <svg class="brand-shell"><use href="/favicon.svg#kerang-logo"/></svg>
+       Warna ikut token halaman lewat custom property (surface, ink, accent, accent-soft),
+       jadi mode terang/gelap otomatis sama dengan kerang di hero.
+    2. Favicon (<link rel="icon" href="/favicon.svg">): file ini menggambar #kerang-shell sendiri
+       (tanpa tali dan ring, karena di 16px ringnya jadi bubur).
+
+    Kalau bentuk kerang di hero berubah, ubah path di sini juga. Jangan gambar kerang di tempat lain.
+  -->
+  <style>
+    :root { --surface: #fffaf2; --ink: #1d1a2b; --accent: #b83a24; --accent-soft: #f6d9cf; --logo-line: 20; }
+    @media (prefers-color-scheme: dark) {
+      :root { --surface: #1f1b2b; --ink: #f2eadc; --accent: #ff8466; --accent-soft: #4a2a28; }
+    }
+  </style>
+  <defs>
+    <g id="kerang-art">
+      <path style="fill: var(--surface, #fffaf2); stroke: var(--ink, #1d1a2b); stroke-width: var(--logo-line, 16); stroke-linejoin: round"
+        d="M112 8L130 28L126 32L150 48L146 52L186 72C204 80 218 92 222 118C226 160 190 196 150 228C138 240 128 254 122 270L112 272C104 244 86 214 70 180C56 150 44 116 52 78L80 56L78 52L98 34L96 30Z"/>
+      <path style="fill: none; stroke: var(--ink, #1d1a2b); stroke-width: calc(var(--logo-line, 16) * 0.7); stroke-linecap: round"
+        d="M52 78Q120 94 186 72M80 56Q112 66 146 52"/>
+      <path style="fill: var(--accent-soft, #f6d9cf); stroke: var(--accent, #b83a24); stroke-width: calc(var(--logo-line, 16) * 0.85); stroke-linejoin: round"
+        d="M150 98C194 100 212 132 198 164C184 196 148 220 124 258C122 220 126 180 134 142C138 120 142 104 150 98Z"/>
+    </g>
+  </defs>
+
+  <!-- Kerang saja: favicon dan ukuran di bawah 32px -->
+  <symbol id="kerang-shell" viewBox="34 -4 204 288">
+    <use href="#kerang-art" xlink:href="#kerang-art"/>
+  </symbol>
+
+  <!-- Merek lengkap: kerang + tali + ring, sama seperti hero -->
+  <symbol id="kerang-logo" viewBox="34 -4 204 364">
+    <use href="#kerang-art" xlink:href="#kerang-art"/>
+    <path style="fill: none; stroke: var(--ink, #1d1a2b); stroke-width: calc(var(--logo-line, 16) * 0.6); stroke-linecap: round" d="M117 272V296"/>
+    <circle cx="117" cy="324" r="24" style="fill: none; stroke: var(--accent, #b83a24); stroke-width: var(--logo-line, 16)"/>
+  </symbol>
+
+  <use href="#kerang-shell" xlink:href="#kerang-shell" x="30" y="-8" width="212" height="296"/>
+</svg>
