@@ -4,13 +4,14 @@
   tapi tetap berkarakter kerang. Dial: ENERGY 2 / RHYTHM 2 / MOTION 1.
 
   Alasan teknik (R-31):
-  - Lavender kerang satu-satunya aksen: isian tombol utama dan badge "sudah tayang" (target yang dikejar);
-    nomor langkah/riwayat pakai --accent-text (ungu tua) supaya tetap lulus AA di latar terang.
+  - Warna-warni pusaran cuma di momen merek: tombol tarik magenta, nomor langkah dan nomor riwayat (tinta dengan
+    bayangan solid magenta/cyan/kuning/ungu/lavender per nomor, jadi angkanya tetap 14:1), garis bawah judul hasil,
+    badge "sudah tayang" kuning. Form dan hasil tetap di permukaan tenang supaya enak dibaca lama.
   - Teal laut untuk label/status/memori, bukan dekorasi.
   - Motif identitas: nomor italic besar di langkah form DAN di item riwayat; "tali" di tombol utama.
   - Bar kreator bergaris putus-putus: area "catatan" yang bisa berubah, beda dari fieldset brief yang solid.
-  - Badge status bergaris (bukan pil warna-warni): status dibaca dari teks, warnanya cuma penanda.
-    Satu-satunya yang diisi lavender: "sudah tayang", karena itu hasil akhirnya.
+  - Badge status bergaris: status dibaca dari teks, warnanya cuma penanda.
+    Satu-satunya yang diisi (kuning, teks tinta 12:1): "sudah tayang", karena itu hasil akhirnya.
   - Motion hanya hover dan titik status yang berdenyut saat Kerang nulis; mati di prefers-reduced-motion.
 */
 
@@ -92,8 +93,13 @@
   font-style: italic;
   font-size: 34px;
   line-height: 1;
-  color: var(--accent-text);
+  color: var(--ink);
+  text-shadow: 0.06em 0.06em 0 var(--n-color, var(--n1));
 }
+.brief .step:nth-of-type(2) .num { --n-color: var(--n2); }
+.brief .step:nth-of-type(3) .num { --n-color: var(--n3); }
+.brief .step:nth-of-type(4) .num { --n-color: var(--n4); }
+.brief .step:nth-of-type(5) .num { --n-color: var(--n5); }
 .step-note { margin: -6px 0 0; color: var(--muted); font-size: 14px; }
 
 label { display: block; font-weight: 600; font-size: 14px; min-width: 0; }
@@ -268,7 +274,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
   height: 8px;
   margin-left: 8px;
   border-radius: 50%;
-  background: var(--accent-text);
+  background: var(--magenta);
   animation: pulse 1s ease-in-out infinite;
 }
 @keyframes pulse { 50% { opacity: 0.2; } }
@@ -301,7 +307,9 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
   font-size: 22px;
   margin: 28px 0 10px;
   padding-bottom: 6px;
-  border-bottom: 4px solid var(--accent);
+  border-bottom: 4px solid var(--magenta);
+  /* Garis bawah pusaran: satu momen warna-warni di hasil, hiasan saja (judulnya tetap teks tinta). */
+  border-image: linear-gradient(90deg, var(--magenta), var(--yellow), var(--cyan), var(--violet)) 1;
   display: inline-block;
 }
 .result h2:first-child { margin-top: 0; }
@@ -378,7 +386,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
   font-weight: 700;
   cursor: pointer;
 }
-.view-tabs [role="tab"][aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent-text); }
+.view-tabs [role="tab"][aria-selected="true"] { color: var(--ink); border-bottom-color: var(--magenta-text); }
 .view-tabs [role="tab"]:hover { color: var(--ink); }
 .tab-count { font-family: "Plus Jakarta Sans", system-ui, sans-serif; font-size: 14px; font-weight: 600; }
 .view { display: flex; flex-direction: column; min-height: 0; flex: 1; }
@@ -405,7 +413,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
   color: var(--muted);
 }
 .status-badge[data-status="sudah direkam"] { border-color: var(--sea); color: var(--sea); }
-.status-badge[data-status="sudah tayang"] { border: 2px solid var(--accent-edge); background: var(--accent); color: var(--on-accent); padding: 1px 9px; }
+.status-badge[data-status="sudah tayang"] { border: 2px solid var(--ink); background: var(--yellow); color: var(--on-fill); padding: 1px 9px; }
 .status-badge[data-status="batal"] { text-decoration: line-through; }
 
 /* Lapor hasil */
@@ -480,17 +488,24 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
   border-radius: var(--radius);
   background: var(--bg);
 }
-.h-item.is-open { border: 2px solid var(--accent-edge); padding: 13px 15px; box-shadow: 4px 4px 0 var(--accent); }
-.h-top { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: baseline; }
+.h-item.is-open { border: 2px solid var(--ink); padding: 13px 15px; box-shadow: 4px 4px 0 var(--magenta); }
+/* Nomor riwayat dan baris pertama judul = satu baris: nomor diberi line-height sama dengan judul (22px) dan
+   dirapatkan ke atas, jadi tengah angka jatuh di tengah huruf kapital judul (sama seperti daftar di landing). */
+.h-top { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start; }
 .h-num {
   font-family: "Fraunces", Georgia, serif;
   font-style: italic;
   font-weight: 700;
   font-size: 30px;
-  line-height: 1;
-  color: var(--accent-text);
+  line-height: 22px;
+  color: var(--ink);
+  text-shadow: 0.06em 0.06em 0 var(--n-color, var(--n1));
 }
-.h-title { margin: 0; font-size: 17px; line-height: 1.3; overflow-wrap: anywhere; }
+.h-item:nth-child(5n + 2) .h-num { --n-color: var(--n2); }
+.h-item:nth-child(5n + 3) .h-num { --n-color: var(--n3); }
+.h-item:nth-child(5n + 4) .h-num { --n-color: var(--n4); }
+.h-item:nth-child(5n + 5) .h-num { --n-color: var(--n5); }
+.h-title { margin: 0; font-size: 17px; line-height: 22px; overflow-wrap: anywhere; }
 .h-meta { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
 .h-ideas { margin: 10px 0; padding-left: 20px; font-size: 14px; }
 .h-ideas li { margin: 2px 0; }

@@ -16,19 +16,20 @@
   -->
   <style>
     /* Sama dengan tokens.css: cangkang lavender, garis ungu-navy, mulut ungu tua polos (bukan jaring), ring putih.
-       Cuma nada warna yang ikut referensi pemilik; bentuk kerangnya tetap gambar kita sendiri. */
-    :root { --accent: #c2a5ee; --outline: #1c225c; --shell-mouth: #6b56c4; --ink: #1c225c; --ring: #ffffff; --logo-line: 20; }
+       Lavender tetap warna merek; warna pusaran (magenta, kuning, cyan) tidak dipakai di logo supaya di 16px
+       kerangnya tetap satu bentuk yang jelas. Cuma nada warna yang ikut referensi pemilik; bentuknya gambar kita sendiri. */
+    :root { --accent: #c2a5ee; --outline: #1e1850; --shell-mouth: #6b56c4; --ink: #1e1850; --ring: #ffffff; --logo-line: 20; }
     @media (prefers-color-scheme: dark) {
-      :root { --accent: #c6adf5; --outline: #0b0e26; --shell-mouth: #5e4ab8; --ink: #eef0ff; --ring: #f4f2ff; }
+      :root { --accent: #c6adf5; --outline: #0a0822; --shell-mouth: #5e4ab8; --ink: #f3f0ff; --ring: #f4f2ff; }
     }
   </style>
   <defs>
     <g id="kerang-art">
-      <path style="fill: var(--accent, #c2a5ee); stroke: var(--outline, #1c225c); stroke-width: var(--logo-line, 16); stroke-linejoin: round"
+      <path style="fill: var(--accent, #c2a5ee); stroke: var(--outline, #1e1850); stroke-width: var(--logo-line, 16); stroke-linejoin: round"
         d="M112 8L130 28L126 32L150 48L146 52L186 72C204 80 218 92 222 118C226 160 190 196 150 228C138 240 128 254 122 270L112 272C104 244 86 214 70 180C56 150 44 116 52 78L80 56L78 52L98 34L96 30Z"/>
-      <path style="fill: none; stroke: var(--outline, #1c225c); stroke-width: calc(var(--logo-line, 16) * 0.7); stroke-linecap: round"
+      <path style="fill: none; stroke: var(--outline, #1e1850); stroke-width: calc(var(--logo-line, 16) * 0.7); stroke-linecap: round"
         d="M52 78Q120 94 186 72M80 56Q112 66 146 52"/>
-      <path style="fill: var(--shell-mouth, #6b56c4); stroke: var(--outline, #1c225c); stroke-width: calc(var(--logo-line, 16) * 0.85); stroke-linejoin: round"
+      <path style="fill: var(--shell-mouth, #6b56c4); stroke: var(--outline, #1e1850); stroke-width: calc(var(--logo-line, 16) * 0.85); stroke-linejoin: round"
         d="M150 98C194 100 212 132 198 164C184 196 148 220 124 258C122 220 126 180 134 142C138 120 142 104 150 98Z"/>
     </g>
   </defs>
@@ -42,9 +43,9 @@
   <symbol id="kerang-logo" viewBox="34 -4 204 364">
     <use href="#kerang-art" xlink:href="#kerang-art"/>
     <!-- Tali pakai --ink (bukan --outline) supaya tetap kelihatan di header gelap -->
-    <path style="fill: none; stroke: var(--ink, #1c225c); stroke-width: calc(var(--logo-line, 16) * 0.6); stroke-linecap: round" d="M117 272V296"/>
+    <path style="fill: none; stroke: var(--ink, #1e1850); stroke-width: calc(var(--logo-line, 16) * 0.6); stroke-linecap: round" d="M117 272V296"/>
     <!-- Ring: tepi tinta lalu putih di dalamnya, sama seperti ring hero (putih saja hilang di latar terang) -->
-    <circle cx="117" cy="324" r="23" style="fill: none; stroke: var(--outline, #1c225c); stroke-width: calc(var(--logo-line, 16) * 1.3)"/>
+    <circle cx="117" cy="324" r="23" style="fill: none; stroke: var(--outline, #1e1850); stroke-width: calc(var(--logo-line, 16) * 1.3)"/>
     <circle cx="117" cy="324" r="23" style="fill: none; stroke: var(--ring, #ffffff); stroke-width: calc(var(--logo-line, 16) * 0.7)"/>
   </symbol>
 

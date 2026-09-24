@@ -5,9 +5,11 @@
   - Split "kerang ngomong | form": kiri momen merek (nomor italic raksasa, judul Fraunces, kerang + tali + ring
     dengan gelembung omongan), kanan form. Kalimatnya berubah sesuai mode, jadi pindah tab terasa dijawab kerang.
   - Gelembung omongan dengan ekor: kalimat itu diucapkan kerang, bukan paragraf deskripsi.
-  - Nomor italic besar (01/02): motif identitas yang sama dengan landing dan studio.
+  - Nomor italic besar (01/02): motif identitas yang sama dengan landing dan studio. Tinta dengan bayangan solid
+    berwarna pusaran (magenta untuk daftar, cyan untuk masuk), jadi angkanya tetap 14:1.
   - Kartu form dengan bayangan solid offset: stiker yang sama dengan kartu jawaban di landing, satu-satunya elevasi.
-  - Garis ungu tua (--accent-text) yang meluncur di bawah tab: mode aktif ditandai posisi, dan geraknya bilang "pindah", bukan "ganti halaman".
+  - Garis magenta (--magenta-text, 6.7:1 terang / 7.9:1 gelap ke kartu) yang meluncur di bawah tab: mode aktif
+    ditandai posisi, dan geraknya bilang "pindah", bukan "ganti halaman".
   - Motion: garis tab meluncur, kerang goyang dan gelembung muncul saat mode ganti. Semua mati di prefers-reduced-motion.
 */
 
@@ -49,8 +51,10 @@
   font-weight: 900;
   font-size: clamp(56px, 8vw, 104px);
   line-height: 1;
-  color: var(--accent-text);
+  color: var(--ink);
+  text-shadow: 0.05em 0.05em 0 var(--n-color, var(--n1));
 }
+.m-main:has(.m-tabs[data-mode="masuk"]) .m-say-num { --n-color: var(--n2); }
 .m-say h1 {
   margin: 4px 0 28px;
   font-size: clamp(38px, 6.4vw, 84px);
@@ -95,7 +99,7 @@
 .m-say-line::before {
   content: "";
   position: absolute;
-  top: 18px;
+  top: 20px; /* tengah ekor (20 + 7) = tengah baris pertama (padding 14 + 19px x 1.35 / 2) */
   left: -9px;
   width: 14px;
   height: 14px;
@@ -148,7 +152,7 @@
   width: 50%;
   height: 4px;
   border-radius: 4px 4px 0 0;
-  background: var(--accent-text);
+  background: var(--magenta-text);
 }
 .m-tabs.is-ready .m-tabs-ink { transition: transform 0.28s cubic-bezier(0.34, 1.3, 0.64, 1); }
 .m-tabs[data-mode="masuk"] .m-tabs-ink { transform: translateX(100%); }
@@ -220,7 +224,7 @@
 /* Meter panjang password: tiga ruas, cuma ngukur panjang (aturan server: minimal 8) */
 .pw-meter { display: flex; gap: 4px; margin-top: 2px; }
 .pw-meter span { flex: 1; height: 4px; border-radius: 2px; background: var(--line); transition: background-color 0.2s ease; }
-.pw-meter[data-level="1"] span:nth-child(1) { background: var(--accent-text); }
+.pw-meter[data-level="1"] span:nth-child(1) { background: var(--magenta-text); }
 .pw-meter[data-level="2"] span:nth-child(-n+2),
 .pw-meter[data-level="3"] span { background: var(--sea); }
 
