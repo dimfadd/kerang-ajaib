@@ -1,112 +1,146 @@
 /*
   Token bersama Kerang Ajaib (dipakai landing, masuk, dan studio).
-  Design Read: satu merek "laut dalam + keranjang kuning" untuk kreator video pendek dan affiliate Indonesia;
-  token ini lantai bersama, tiap halaman mengatur dial sendiri.
+  Design Read: satu merek "kerang lavender di laut dangkal yang cerah" untuk kreator video pendek dan affiliate
+  Indonesia; token ini lantai bersama, tiap halaman mengatur dial sendiri. Gaya: warna rata ala kartun, garis tinta
+  tebal. Tanpa gradien hiasan, tanpa glow, tanpa kaca buram.
+
+  Sumber nada warna: dua gambar referensi dari pemilik (kerang kartun di laut). Yang diambil CUMA nada warnanya.
+  Batas IP: gambar itu karakter Nickelodeon, jadi desainnya tidak ditiru: tidak ada mulut berjaring/grille,
+  tidak meniru siluet cangkangnya, tidak ada latar sinar matahari, tidak ada ilustrasi rumput laut. Kerang kita
+  tetap gambar sendiri (svg#conch di index.html dan favicon.svg), cuma diwarnai ulang.
+
+  Warna yang diekstrak dari referensi (bukan token, catatan asal-usul):
+    cangkang lavender #D09AE1 / #A4A6D4, bayangan periwinkle #6174B9, sorot lilac #C8C0E0,
+    garis luar ungu-navy #203379 / #4B3B5C, langit #4AA7E5 / #A6D9F2, air teal #00A7C0 memudar ke #E5EFE9,
+    rumput laut #508818, pasir #F6FED2.
 
   Palet (2 warna inti + 1 aksen, netral tidak dihitung). Alasan per warna:
-  - Tinta laut dalam #0A2830 (--ink / --deep): struktur. Laut tempat kerang berasal; biru-hijau gelap, bukan hitam
-    netral dan bukan ungu, jadi garis tinta dan blok terbalik punya warna sendiri.
-  - Hijau laut #0A6B5C terang / #74CFBF gelap (--sea): warna kedua untuk label, link, dan status "jalan". Air dangkal
-    di atas karang; beda jelas dari tinta, tetap lulus AA sebagai teks.
-  - Kuning keranjang #FFD21A (--accent): satu-satunya aksen keras. Keranjang kuning TikTok Shop, hal yang dikejar
-    pengguna tiap hari. Dipakai sebagai ISIAN (tombol, ring, sorotan) dengan teks tinta di atasnya, bukan sebagai
-    teks di latar terang.
-  - Emas tua #7A5A00 (--accent-text, cuma tema terang): versi kuning yang aman jadi teks/garis di latar terang
-    (5.1:1 ke atas). Di tema gelap kuning aslinya sudah 8:1 lebih, jadi dipakai langsung.
+  - Tinta ungu-navy #1C225C (--ink / --deep / --outline terang): struktur. Diturunkan dari garis luar referensi;
+    garis tinta tebal itu yang bikin gaya kartunnya, dan sebagai teks 13:1 ke latar.
+  - Teal laut #006B7A terang / #62D5E2 gelap (--sea): warna kedua untuk label, link, status, dan cincin fokus.
+    Air di referensi (#00A7C0) digelapkan supaya lulus AA sebagai teks (5:1 ke atas di semua latar terang).
+  - Lavender kerang #C2A5EE terang / #C6ADF5 gelap (--accent): satu-satunya aksen, warna cangkang. Dipakai sebagai
+    ISIAN (tombol utama, kotak sorot, badge "sudah tayang") dengan teks tinta di atasnya (6.9:1). Dipilih di atas biru
+    langit karena lavender berseberangan dengan latar aqua, jadi tombolnya nongol; biru langit malah nyaru.
+  - Ungu tua #5A3EA0 (--accent-text, tema terang): versi lavender yang aman jadi teks/angka/garis di latar terang
+    (6.4:1 ke atas). Lavender aslinya cuma 1.9:1 ke latar, jadi tidak pernah dipakai sebagai teks terang.
+    Tema gelap: #CDB8F8 (7:1 ke atas).
   - Merah #B3261E / #FF8F85 (--danger): khusus error, tidak pernah dipakai sebagai hiasan.
-  - Netral dingin (#EDF3F2 busa laut, #FBFDFC, #DDE9E7; gelap #0B2027, #102C35, #173842): sengaja abu kehijauan
-    dingin. Tidak ada krem/pasir hangat, supaya tidak terbaca sebagai merek lain.
+  - Netral aqua (#EAF6F9 air dangkal, #FBFEFF, #D9EEF3): versi pucat dari air referensi yang memudar, jadi halaman
+    terang terasa di bawah air yang kena matahari. Gelap (#131939, #1B2250, #242C5E): laut yang sama di malam hari,
+    biru-ungu, bukan hitam netral.
+  - Rumput laut dan pasir dari referensi sengaja tidak dipakai: aturan maksimal 2 warna inti + 1 aksen.
 
-  Peran token (penting untuk kuning):
-  - --accent: isian. --on-accent: teks/ikon di atas isian kuning.
+  Token kerang (bagian dari keluarga lavender, bukan warna baru):
+  - --shell-hi #E7DCFB: sorot lilac di bintil kerang. --shell-mouth #6B56C4: bagian dalam mulut, ungu lebih tua
+    polos (bukan jaring). --ring #FFFFFF: ring putih bergaris tinta. --outline: garis luar kerang; di tema gelap
+    #0B0E26 supaya tetap garis gelap ala kartun (bentuknya dibaca dari isian lavender, 8.7:1 ke latar).
+  - --sky #B9E6EE: rel toggle siang, air aqua yang cerah.
+
+  Peran token:
+  - --accent: isian. --on-accent: teks/ikon di atas isian lavender.
   - --accent-text: teks, angka besar, dan garis status berwarna aksen.
-  - --accent-edge: tepi tombol kuning. Terang: tinta (kuning vs busa laut cuma 1.4:1, tepinya harus tinta);
-    gelap: kuning itu sendiri (sudah 11:1 ke latar).
+  - --accent-edge: tepi tombol lavender. Terang: tinta (lavender vs latar cuma 1.9:1, tepinya yang bikin 3:1);
+    gelap: lavender itu sendiri (8.7:1 ke latar).
   - --accent-soft: latar sorotan pucat di belakang teks tinta.
   - --deep / --deep-ink / --*-inv: blok "laut dalam" (bagian spektrum, toggle malam). Selalu gelap di dua tema,
-    jadi kuningnya selalu dipakai di atas gelap. --deep-edge: garis tipis pembatas blok itu di tema gelap,
-    karena di sana latar halaman juga gelap.
-  - --focus: cincin fokus. Terang hijau laut (5.7:1), gelap kuning (11:1).
+    jadi lavender dan aqua terang selalu dipakai di atas gelap. --deep-edge: garis tipis pembatas blok itu di tema
+    gelap, karena di sana latar halaman juga gelap.
+  - --focus: cincin fokus, teal di dua tema (5.1:1 terang, 7.6:1 gelap ke semua latar). Di blok --deep fokus
+    pakai --accent-inv.
 
   Alasan teknik lain:
   - Fraunces untuk judul (kerang tua yang bijak tapi usil), Plus Jakarta Sans untuk teks (foundry Indonesia, nyaman di form panjang).
 */
 
 :root {
-  --bg: #edf3f2;
-  --surface: #fbfdfc;
-  --surface-2: #dde9e7;
-  --ink: #0a2830;
-  --muted: #3d5860;
-  --line: #c3d4d2;
-  --line-strong: #5f7c82;
-  --accent: #ffd21a;
-  --on-accent: #0a2830;
-  --accent-text: #7a5a00;
-  --accent-edge: #0a2830;
-  --accent-soft: #fff0a8;
-  --sea: #0a6b5c;
+  --bg: #eaf6f9;
+  --surface: #fbfeff;
+  --surface-2: #d9eef3;
+  --ink: #1c225c;
+  --muted: #474d80;
+  --line: #bfd2e0;
+  --line-strong: #6570a6;
+  --accent: #c2a5ee;
+  --on-accent: #1c225c;
+  --accent-text: #5a3ea0;
+  --accent-edge: #1c225c;
+  --accent-soft: #ece2fb;
+  --sea: #006b7a;
   --danger: #b3261e;
-  --focus: #0a6b5c;
-  --deep: #0a2830;
-  --deep-ink: #edf3f2;
+  --focus: #006b7a;
+  --deep: #1c225c;
+  --deep-ink: #eef1ff;
   --deep-edge: transparent;
-  --accent-inv: #ffd21a;
-  --sea-inv: #74cfbf;
-  --muted-inv: #9fb6ba;
+  --accent-inv: #c9b2f5;
+  --sea-inv: #62d5e2;
+  --muted-inv: #a9afdb;
+  --sky: #b9e6ee;
+  --ring: #ffffff;
+  --outline: #1c225c;
+  --shell-hi: #e7dcfb;
+  --shell-mouth: #6b56c4;
   --radius-sm: 8px;
   --radius: 14px;
-  --shadow-lift: 0 10px 30px -18px rgba(10, 40, 48, 0.45);
+  --shadow-lift: 0 10px 30px -18px rgba(28, 34, 92, 0.45);
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0b2027;
-    --surface: #102c35;
-    --surface-2: #173842;
-    --ink: #e6f0ee;
-    --muted: #a6bdbf;
-    --line: #2b4b55;
-    --line-strong: #6d8d94;
-    --accent: #ffd21a;
-    --on-accent: #0a2830;
-    --accent-text: #ffd21a;
-    --accent-edge: #ffd21a;
-    --accent-soft: #423c0e;
-    --sea: #74cfbf;
+    --bg: #131939;
+    --surface: #1b2250;
+    --surface-2: #242c5e;
+    --ink: #eef0ff;
+    --muted: #b2b8df;
+    --line: #343e78;
+    --line-strong: #7b84be;
+    --accent: #c6adf5;
+    --on-accent: #1c225c;
+    --accent-text: #cdb8f8;
+    --accent-edge: #c6adf5;
+    --accent-soft: #332a66;
+    --sea: #62d5e2;
     --danger: #ff8f85;
-    --focus: #ffd21a;
-    --deep: #04141a;
-    --deep-ink: #e6f0ee;
-    --deep-edge: #2b4b55;
-    --muted-inv: #93aaae;
-    --shadow-lift: 0 10px 30px -18px rgba(0, 0, 0, 0.8);
+    --focus: #62d5e2;
+    --deep: #0b0f2b;
+    --deep-ink: #eef0ff;
+    --deep-edge: #343e78;
+    --muted-inv: #a0a7d4;
+    --ring: #f4f2ff;
+    --outline: #0b0e26;
+    --shell-hi: #dccdfa;
+    --shell-mouth: #5e4ab8;
+    --shadow-lift: 0 10px 30px -18px rgba(3, 4, 18, 0.8);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #0b2027;
-  --surface: #102c35;
-  --surface-2: #173842;
-  --ink: #e6f0ee;
-  --muted: #a6bdbf;
-  --line: #2b4b55;
-  --line-strong: #6d8d94;
-  --accent: #ffd21a;
-  --on-accent: #0a2830;
-  --accent-text: #ffd21a;
-  --accent-edge: #ffd21a;
-  --accent-soft: #423c0e;
-  --sea: #74cfbf;
+  --bg: #131939;
+  --surface: #1b2250;
+  --surface-2: #242c5e;
+  --ink: #eef0ff;
+  --muted: #b2b8df;
+  --line: #343e78;
+  --line-strong: #7b84be;
+  --accent: #c6adf5;
+  --on-accent: #1c225c;
+  --accent-text: #cdb8f8;
+  --accent-edge: #c6adf5;
+  --accent-soft: #332a66;
+  --sea: #62d5e2;
   --danger: #ff8f85;
-  --focus: #ffd21a;
-  --deep: #04141a;
-  --deep-ink: #e6f0ee;
-  --deep-edge: #2b4b55;
-  --muted-inv: #93aaae;
-  --shadow-lift: 0 10px 30px -18px rgba(0, 0, 0, 0.8);
+  --focus: #62d5e2;
+  --deep: #0b0f2b;
+  --deep-ink: #eef0ff;
+  --deep-edge: #343e78;
+  --muted-inv: #a0a7d4;
+  --ring: #f4f2ff;
+  --outline: #0b0e26;
+  --shell-hi: #dccdfa;
+  --shell-mouth: #5e4ab8;
+  --shadow-lift: 0 10px 30px -18px rgba(3, 4, 18, 0.8);
   color-scheme: dark;
 }
 
@@ -133,7 +167,7 @@ h1, h2, h3, legend {
   outline-offset: 2px;
 }
 
-/* Seleksi teks = stabilo kuning, sama seperti sorotan di halaman */
+/* Seleksi teks = stabilo lavender, sama seperti kotak sorot di judul */
 ::selection { background: var(--accent); color: var(--on-accent); }
 
 .sr-only {
@@ -219,9 +253,9 @@ h1, h2, h3, legend {
   left: -5px;
   width: 12px;
   height: 12px;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--outline);
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--ring);
 }
 .pull-btn:hover:not(:disabled) .pull-string { height: 26px; top: -26px; }
 .pull-btn.small .pull-string { display: none; }
@@ -236,9 +270,9 @@ h1, h2, h3, legend {
 }
 
 /*
-  Toggle tema "siang di permukaan / malam di laut dalam", satu komponen untuk semua halaman (markup dari theme.js).
-  - Siang: matahari = cakram kuning keranjang dengan tepi tinta (tepi supaya tetap 3:1 di rel terang).
-  - Malam: rel jadi laut dalam (--deep), bulan kuning tanpa cakram, gelombang hijau laut.
+  Toggle tema "siang di air dangkal / malam di laut dalam", satu komponen untuk semua halaman (markup dari theme.js).
+  - Siang: rel aqua cerah (--sky), matahari = cakram putih bertepi tinta dengan ikon tinta (9:1 ke rel).
+  - Malam: rel jadi laut dalam biru-ungu (--deep), bulan lavender tanpa cakram, gelombang aqua.
   - Rel = permukaan laut: gelombang di dasar rel supaya matahari/bulan terbaca "di atas laut", bukan saklar generik.
   - Jempol meluncur + ikon matahari berputar jadi bulan: status terlihat dari posisi DAN ikon, tidak cuma warna.
   - Tombolnya sendiri transparan dan min 44px; rel 56x30 cuma visual di dalamnya.
@@ -269,7 +303,7 @@ h1, h2, h3, legend {
   height: 30px;
   border: 2px solid var(--ink);
   border-radius: 999px;
-  background: var(--surface);
+  background: var(--sky);
   overflow: hidden;
 }
 .theme-toggle:hover .theme-toggle-track { border-color: var(--sea); }
@@ -291,9 +325,9 @@ h1, h2, h3, legend {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--on-accent);
-  box-shadow: inset 0 0 0 2px var(--on-accent);
+  background: var(--ring);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
 }
 .theme-toggle-thumb svg {
   position: absolute;

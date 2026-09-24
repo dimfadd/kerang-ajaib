@@ -7,7 +7,7 @@
 
     Dipakai dengan dua cara:
     1. Header semua halaman: <svg class="brand-shell"><use href="/favicon.svg#kerang-logo"/></svg>
-       Warna ikut token halaman lewat custom property (surface, ink, accent),
+       Warna ikut token halaman lewat custom property (accent, outline, shell-mouth, ink, ring),
        jadi mode terang/gelap otomatis sama dengan kerang di hero.
     2. Favicon (<link rel="icon" href="/favicon.svg">): file ini menggambar #kerang-shell sendiri
        (tanpa tali dan ring, karena di 16px ringnya jadi bubur).
@@ -15,19 +15,20 @@
     Kalau bentuk kerang di hero berubah, ubah path di sini juga. Jangan gambar kerang di tempat lain.
   -->
   <style>
-    /* Sama dengan tokens.css: busa laut + tinta laut dalam + mulut kuning keranjang */
-    :root { --surface: #fbfdfc; --ink: #0a2830; --accent: #ffd21a; --logo-line: 20; }
+    /* Sama dengan tokens.css: cangkang lavender, garis ungu-navy, mulut ungu tua polos (bukan jaring), ring putih.
+       Cuma nada warna yang ikut referensi pemilik; bentuk kerangnya tetap gambar kita sendiri. */
+    :root { --accent: #c2a5ee; --outline: #1c225c; --shell-mouth: #6b56c4; --ink: #1c225c; --ring: #ffffff; --logo-line: 20; }
     @media (prefers-color-scheme: dark) {
-      :root { --surface: #102c35; --ink: #e6f0ee; --accent: #ffd21a; }
+      :root { --accent: #c6adf5; --outline: #0b0e26; --shell-mouth: #5e4ab8; --ink: #eef0ff; --ring: #f4f2ff; }
     }
   </style>
   <defs>
     <g id="kerang-art">
-      <path style="fill: var(--surface, #fbfdfc); stroke: var(--ink, #0a2830); stroke-width: var(--logo-line, 16); stroke-linejoin: round"
+      <path style="fill: var(--accent, #c2a5ee); stroke: var(--outline, #1c225c); stroke-width: var(--logo-line, 16); stroke-linejoin: round"
         d="M112 8L130 28L126 32L150 48L146 52L186 72C204 80 218 92 222 118C226 160 190 196 150 228C138 240 128 254 122 270L112 272C104 244 86 214 70 180C56 150 44 116 52 78L80 56L78 52L98 34L96 30Z"/>
-      <path style="fill: none; stroke: var(--ink, #0a2830); stroke-width: calc(var(--logo-line, 16) * 0.7); stroke-linecap: round"
+      <path style="fill: none; stroke: var(--outline, #1c225c); stroke-width: calc(var(--logo-line, 16) * 0.7); stroke-linecap: round"
         d="M52 78Q120 94 186 72M80 56Q112 66 146 52"/>
-      <path style="fill: var(--accent, #ffd21a); stroke: var(--ink, #0a2830); stroke-width: calc(var(--logo-line, 16) * 0.85); stroke-linejoin: round"
+      <path style="fill: var(--shell-mouth, #6b56c4); stroke: var(--outline, #1c225c); stroke-width: calc(var(--logo-line, 16) * 0.85); stroke-linejoin: round"
         d="M150 98C194 100 212 132 198 164C184 196 148 220 124 258C122 220 126 180 134 142C138 120 142 104 150 98Z"/>
     </g>
   </defs>
@@ -40,10 +41,11 @@
   <!-- Merek lengkap: kerang + tali + ring, sama seperti hero -->
   <symbol id="kerang-logo" viewBox="34 -4 204 364">
     <use href="#kerang-art" xlink:href="#kerang-art"/>
-    <path style="fill: none; stroke: var(--ink, #0a2830); stroke-width: calc(var(--logo-line, 16) * 0.6); stroke-linecap: round" d="M117 272V296"/>
-    <!-- Ring: tepi tinta lalu kuning di dalamnya, sama seperti ring hero (kuning saja hilang di latar terang) -->
-    <circle cx="117" cy="324" r="23" style="fill: none; stroke: var(--ink, #0a2830); stroke-width: calc(var(--logo-line, 16) * 1.3)"/>
-    <circle cx="117" cy="324" r="23" style="fill: none; stroke: var(--accent, #ffd21a); stroke-width: calc(var(--logo-line, 16) * 0.7)"/>
+    <!-- Tali pakai --ink (bukan --outline) supaya tetap kelihatan di header gelap -->
+    <path style="fill: none; stroke: var(--ink, #1c225c); stroke-width: calc(var(--logo-line, 16) * 0.6); stroke-linecap: round" d="M117 272V296"/>
+    <!-- Ring: tepi tinta lalu putih di dalamnya, sama seperti ring hero (putih saja hilang di latar terang) -->
+    <circle cx="117" cy="324" r="23" style="fill: none; stroke: var(--outline, #1c225c); stroke-width: calc(var(--logo-line, 16) * 1.3)"/>
+    <circle cx="117" cy="324" r="23" style="fill: none; stroke: var(--ring, #ffffff); stroke-width: calc(var(--logo-line, 16) * 0.7)"/>
   </symbol>
 
   <use href="#kerang-shell" xlink:href="#kerang-shell" x="30" y="-8" width="212" height="296"/>
