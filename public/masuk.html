@@ -24,36 +24,58 @@
       <svg class="brand-shell" aria-hidden="true" focusable="false"><use href="/favicon.svg#kerang-logo"/></svg>
       <span>Kerang Ajaib</span>
     </a>
-    <button type="button" class="ghost-btn" id="themeToggle"><span data-theme-label>Mode gelap</span></button>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-pressed="false"><span class="theme-toggle-label">Mode gelap</span></button>
   </header>
 
   <main class="m-main">
     <section class="m-say" aria-live="polite">
       <p class="m-say-num" aria-hidden="true" id="sayNum">01</p>
       <h1 id="sayTitle">Kenalan dulu.</h1>
-      <p class="m-say-line" id="sayLine">Kerang nggak bisa ngasih ide personal ke orang yang belum dia kenal. Bikin akun, terus kenalin kreator-kreatormu satu per satu.</p>
+      <div class="m-say-talk">
+        <svg class="m-say-conch" id="sayConch" aria-hidden="true" focusable="false"><use href="/favicon.svg#kerang-logo"/></svg>
+        <p class="m-say-line" id="sayLine">Kerang nggak bisa ngasih ide personal ke orang yang belum dia kenal. Bikin akun, terus kenalin kreator-kreatormu satu per satu.</p>
+      </div>
     </section>
 
     <section class="m-card" aria-labelledby="sayTitle">
-      <div class="m-tabs" role="tablist" aria-label="Pilih daftar atau masuk">
+      <div class="m-tabs" role="tablist" aria-label="Pilih daftar atau masuk" id="tabList" data-mode="daftar">
         <button type="button" role="tab" id="tabDaftar" aria-controls="authPanel" aria-selected="true" data-mode="daftar">Daftar</button>
         <button type="button" role="tab" id="tabMasuk" aria-controls="authPanel" aria-selected="false" tabindex="-1" data-mode="masuk">Masuk</button>
+        <span class="m-tabs-ink" aria-hidden="true"></span>
       </div>
 
       <div id="authPanel" role="tabpanel" aria-labelledby="tabDaftar">
         <form id="authForm" novalidate>
-          <label id="nameField">Nama kamu
-            <input name="name" autocomplete="name" placeholder="Nama panggilan juga boleh" maxlength="80">
-          </label>
-          <label>Email
-            <input name="email" type="email" autocomplete="email" inputmode="email" placeholder="kamu@email.com" required>
-          </label>
-          <label for="password">Password</label>
-          <div class="pw-row">
-            <input id="password" name="password" type="password" autocomplete="new-password" required aria-describedby="pwHint">
-            <button type="button" class="ghost-btn" id="pwToggle" aria-controls="password">Lihat</button>
+          <div class="m-field" id="nameField">
+            <label for="name">Nama kamu</label>
+            <input id="name" name="name" autocomplete="name" placeholder="Nama panggilan juga boleh" maxlength="80" aria-describedby="nameErr">
+            <p class="m-field-error" id="nameErr"></p>
           </div>
-          <p class="m-hint" id="pwHint">Minimal 8 karakter.</p>
+          <div class="m-field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="kamu@email.com" required aria-describedby="emailErr">
+            <p class="m-field-error" id="emailErr"></p>
+          </div>
+          <div class="m-field">
+            <label for="password">Password</label>
+            <div class="pw-wrap">
+              <input id="password" name="password" type="password" autocomplete="new-password" required aria-describedby="pwHint passwordErr">
+              <button type="button" class="pw-eye" id="pwToggle" aria-controls="password" aria-pressed="false" aria-label="Tampilkan password">
+                <svg class="pw-eye-open" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/>
+                  <circle cx="12" cy="12" r="3.2"/>
+                </svg>
+                <svg class="pw-eye-shut" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/>
+                  <circle cx="12" cy="12" r="3.2"/>
+                  <path class="pw-eye-slash" d="M4 4l16 16"/>
+                </svg>
+              </button>
+            </div>
+            <div class="pw-meter" id="pwMeter" data-level="0" aria-hidden="true"><span></span><span></span><span></span></div>
+            <p class="m-hint" id="pwHint">Minimal 8 karakter.</p>
+            <p class="m-field-error" id="passwordErr"></p>
+          </div>
 
           <p class="m-error" id="authError" role="alert"></p>
 

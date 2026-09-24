@@ -510,8 +510,8 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
   .grid-2, .grid-3, .bold-options, .report-grid { grid-template-columns: minmax(0, 1fr); }
   .step { padding: 16px 14px 18px; }
   .topbar { flex-wrap: wrap; padding-block: 14px; }
-  .topbar-actions { width: 100%; justify-content: flex-start; }
-  .who { width: 100%; max-width: none; margin: 0; }
+  .topbar-actions { width: 100%; flex-wrap: nowrap; justify-content: flex-start; }
+  .who { flex: 1 1 auto; min-width: 0; max-width: none; margin: 0; }
   .tagline { font-size: 13px; }
   .pull-btn { width: 100%; }
   .revise-row { flex-direction: column; align-items: stretch; }

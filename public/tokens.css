@@ -196,6 +196,93 @@ h1, h2, h3, legend {
   overflow: visible;
 }
 
+/*
+  Toggle tema "pantai siang / laut malam", satu komponen untuk semua halaman (markup dari theme.js).
+  - Rel = garis pantai: gelombang laut di dasar rel supaya matahari/bulan terbaca "di atas laut", bukan saklar generik.
+  - Jempol meluncur + ikon matahari berputar jadi bulan: status terlihat dari posisi DAN ikon, tidak cuma warna.
+  - Tombolnya sendiri transparan dan min 44px; rel 56x30 cuma visual di dalamnya.
+*/
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-toggle:focus-visible { outline-offset: 0; }
+.theme-toggle-track {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: 56px;
+  height: 30px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.theme-toggle:hover .theme-toggle-track { border-color: var(--accent); }
+.theme-toggle-sea {
+  position: absolute;
+  left: 0;
+  bottom: 1px;
+  width: 100%;
+  height: 8px;
+  fill: none;
+  stroke: var(--sea);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.theme-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.theme-toggle-thumb svg {
+  position: absolute;
+  inset: 3px;
+  width: 16px;
+  height: 16px;
+}
+.theme-toggle-sun { fill: currentColor; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.theme-toggle-moon { fill: currentColor; opacity: 0; transform: rotate(-90deg) scale(0.6); }
+.theme-toggle[aria-pressed="true"] .theme-toggle-track { background: var(--sea-inv); }
+.theme-toggle[aria-pressed="true"] .theme-toggle-thumb {
+  transform: translateX(26px);
+  background: var(--ink);
+  color: var(--sea-inv);
+}
+.theme-toggle[aria-pressed="true"] .theme-toggle-sun { opacity: 0; transform: rotate(90deg) scale(0.6); }
+.theme-toggle[aria-pressed="true"] .theme-toggle-moon { opacity: 1; transform: none; }
+/* Transisi hanya setelah is-ready, supaya status awal tidak ikut dianimasikan saat halaman dibuka. */
+.theme-toggle.is-ready .theme-toggle-thumb { transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1), background-color 0.2s ease; }
+.theme-toggle.is-ready .theme-toggle-thumb svg { transition: opacity 0.2s ease, transform 0.28s ease; }
+.theme-toggle.is-ready .theme-toggle-track { transition: background-color 0.2s ease, border-color 0.15s ease; }
+@media (max-width: 560px) {
+  .theme-toggle-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pull-btn, .pull-string { transition: none; }
+  .theme-toggle.is-ready .theme-toggle-thumb,
+  .theme-toggle.is-ready .theme-toggle-thumb svg,
+  .theme-toggle.is-ready .theme-toggle-track { transition: none; }
 }

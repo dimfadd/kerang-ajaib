@@ -56,6 +56,7 @@ const conchStage = document.getElementById("conchStage");
 const ring = document.getElementById("ring");
 const answerBody = document.getElementById("answerBody");
 const answerNum = document.getElementById("answerNum");
+const answer = document.getElementById("answer");
 
 let index = -1;
 let ctaHref = "/masuk";
@@ -86,10 +87,45 @@ function speak() {
   if (!reduceMotion.matches) {
     answerBody.classList.remove("pop");
     conch.classList.remove("talk");
+    ring.classList.remove("rang");
+    answerNum.parentElement.classList.remove("bump");
     void answerBody.offsetWidth; // mulai ulang animasi
     answerBody.classList.add("pop");
     conch.classList.add("talk");
+    ring.classList.add("rang");
+    answerNum.parentElement.classList.add("bump");
   }
+  // Fokus tidak dipindah: jawaban diumumkan lewat aria-live, dan ring tetap siap ditarik lagi.
+  requestAnimationFrame(revealAnswer);
+}
+
+/* ---------- Pastikan jawaban kelihatan ---------- */
+// Kalau kartu jawaban (atau sebagian) di luar layar, geser halaman secukupnya supaya kerang
+// dan jawabannya kelihatan bareng. Kalau sudah kelihatan, diam. Tarikan beruntun tidak bikin
+// halaman loncat-loncat: setelah satu geseran, tunggu dulu sebentar.
+const EDGE = 12;
+let lastReveal = 0;
+function revealAnswer() {
+  const now = performance.now();
+  if (now - lastReveal < 900) return;
+  const vh = window.innerHeight;
+  const a = answer.getBoundingClientRect();
+  if (a.top >= EDGE && a.bottom <= vh - EDGE) return;
+
+  const c = conchStage.getBoundingClientRect();
+  const top = Math.min(a.top, c.top);
+  const bottom = Math.max(a.bottom, c.bottom);
+  let delta;
+  if (bottom - top <= vh - EDGE * 2) {
+    // Muat semua: geser minimal supaya bagian bawah masuk, atau bagian atas turun ke layar.
+    delta = a.bottom > vh - EDGE ? bottom - (vh - EDGE) : top - EDGE;
+  } else {
+    // Nggak muat: prioritaskan awal jawaban.
+    delta = a.top - EDGE;
+  }
+  if (Math.abs(delta) < 4) return;
+  lastReveal = now;
+  window.scrollBy({ top: delta, behavior: reduceMotion.matches ? "auto" : "smooth" });
 }
 
 /* ---------- Tali: drag, klik, keyboard ---------- */
@@ -106,7 +142,7 @@ function setPull(value) {
 }
 
 function springBack() {
-  conchStage.classList.remove("yanking");
+  conchStage.classList.remove("yanking", "armed");
   conchStage.classList.add("springing");
   setPull(0);
 }
@@ -124,6 +160,7 @@ ring.addEventListener("pointermove", (e) => {
   const dy = Math.max(0, Math.min(MAX_PULL, e.clientY - startY));
   // makin jauh makin berat, biar kerasa kayak tali
   setPull(Math.round(dy * (1 - dy / (MAX_PULL * 2.4))));
+  conchStage.classList.toggle("armed", pull >= TRIGGER_PULL);
 });
 
 function endDrag() {
